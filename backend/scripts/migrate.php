@@ -23,3 +23,11 @@ foreach ($migrationFiles as $file) {
 }
 
 echo 'Migrations complete.' . PHP_EOL;
+
+// if(extension_loaded('pdo_mysql')) {
+//     echo "PDO MySQL driver is installed and loaded.";
+// } else {
+//     echo "PDO MySQL is NOT installed or loaded.";
+// }
+
+?>

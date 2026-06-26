@@ -38,3 +38,4 @@ class Response
         echo json_encode($this->body, JSON_UNESCAPED_SLASHES);
     }
 }
+?>

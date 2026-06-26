@@ -57,3 +57,4 @@ try {
 } catch (Throwable $exception) {
     Response::jsonError('Internal server error', 500, 'internal_server_error')->send();
 }
+?>

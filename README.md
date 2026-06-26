@@ -17,13 +17,19 @@ The app uses two tables:
 mysql -u root -p -e "CREATE DATABASE hive_stock CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 ```
 
-2. Copy the backend environment example and update credentials if needed.
+2. Create and/or update environment credentials. Your file should look something like this:
 
 ```bash
-cp backend/.env.example backend/.env
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=hive_stock
+DB_USERNAME=root
+DB_PASSWORD=secret
+CORS_ORIGIN=http://localhost:5173
 ```
 
 3. Run migrations.
+If PHP is not already installed, I suggest installing it using chocolatey. Go where it's installed (i.e. 'C:\tools\php85'), and find the php.ini file. Uncomment 'extension=pdo_mysql'. Then run the migrations.
 
 ```bash
 php backend/scripts/migrate.php
@@ -70,6 +76,22 @@ Open `http://localhost:5173`. During local development, Vite proxies `/api` requ
 | `GET` | `/api/v1/locations/{barcode}/items` | List items in a location |
 | `POST` | `/api/v1/locations` | Create a location |
 | `PATCH` | `/api/v1/locations/{barcode}` | Update a location's parent |
+
+## Quick Dev Start-Up
+In different command line terminals...
+
+1. Start the PHP API server.
+
+```bash
+php -S localhost:8080 -t backend/public
+```
+
+2. Start SvelteKit.
+
+```bash
+cd frontend
+npm run dev
+```
 
 ## Validation
 

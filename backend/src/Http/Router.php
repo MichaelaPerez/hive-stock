@@ -63,3 +63,4 @@ class Router
         return array_map('urldecode', $matches);
     }
 }
+?>

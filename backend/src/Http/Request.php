@@ -40,3 +40,4 @@ class Request
         return $this->json = is_array($decoded) ? $decoded : [];
     }
 }
+?>

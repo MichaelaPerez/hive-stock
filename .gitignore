@@ -1,0 +1,4 @@
+*.env
+*.ini
+node_modules
+.svelte-kit
