@@ -1,31 +1,44 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { ApiError } from '$lib/api/client';
-	import { getItemsInLocation, getLocations, searchItem, searchLocation } from '$lib/api/inventory';
+	import { getItemsInLocation, getLocations, getItems, searchItem, searchLocation } from '$lib/api/inventory';
 	import type { Item, Location } from '$lib/api/types';
 	import AddItemModal from '$lib/components/AddItemModal.svelte';
 	import AddLocationModal from '$lib/components/AddLocationModal.svelte';
 	import ItemCard from '$lib/components/ItemCard.svelte';
 	import LocationCard from '$lib/components/LocationCard.svelte';
+	import AllItemsCard from '$lib/components/AllItemsCard.svelte';
 	import SearchBar from '$lib/components/SearchBar.svelte';
 
 	let locations: Location[] = [];
 	let selectedItem: Item | null = null;
 	let selectedLocation: Location | null = null;
 	let locationItems: Item[] = [];
+	let allItems: Item[] = [];
 
 	let itemLoading = false;
 	let locationLoading = false;
+	let allItemsLoading = false;
 	let itemError = '';
 	let locationError = '';
+	let allItemsError = '';
 	let pageError = '';
 	let toast = '';
 
 	let addItemOpen = false;
 	let addLocationOpen = false;
+	let allItemsShow = false;
+
+	let itemTable = [
+		{
+			'Item' : 'Item',
+			'Location' : 'Location'
+		}
+	];
 
 	onMount(() => {
 		void refreshLocations();
+		void refreshAllItems();
 	});
 
 	async function refreshLocations() {
@@ -35,6 +48,22 @@
 		} catch (error) {
 			pageError = messageFor(error, 'Unable to load locations');
 		}
+	}
+
+	async function refreshAllItems() {
+		try {
+			allItems = await getItems();
+			fillItemTable();
+			pageError = '';
+		} catch (error) {
+			pageError = messageFor(error, 'Unable to load all items');
+		}
+	}
+
+	function fillItemTable() {
+		allItems.forEach((item) => {
+			itemTable.push({'Item': item.name, 'Location': item.location_name});
+		});
 	}
 
 	async function handleItemSearch(query: string) {
@@ -71,6 +100,7 @@
 		selectedItem = event.detail;
 		addItemOpen = false;
 		showToast('Item added successfully.');
+		refreshAllItems();
 	}
 
 	async function handleLocationCreated(event: CustomEvent<Location>) {
@@ -131,14 +161,17 @@
 		/>
 	</section>
 
-	<ItemCard item={selectedItem} loading={itemLoading} error={itemError} />
-
-	<LocationCard
-		location={selectedLocation}
-		items={locationItems}
-		loading={locationLoading}
-		error={locationError}
-	/>
+	{#if allItemsShow} 
+		<AllItemsCard itemTable={itemTable} loading={allItemsLoading} error={allItemsError}/> 
+	{:else}
+		<ItemCard item={selectedItem} loading={itemLoading} error={itemError} />
+		<LocationCard
+			location={selectedLocation}
+			items={locationItems}
+			loading={locationLoading}
+			error={locationError}
+		/>
+	{/if}
 
 	<section class="action-row" aria-label="Inventory actions">
 		<button type="button" class="accent-button" on:click={() => (addItemOpen = true)}>
@@ -146,6 +179,9 @@
 		</button>
 		<button type="button" class="accent-button" on:click={() => (addLocationOpen = true)}>
 			Add New Location
+		</button>
+		<button type="button" class="accent-button" on:click={() => (allItemsShow=!allItemsShow)}>
+			Show/Hide All Items
 		</button>
 	</section>
 </main>

@@ -178,7 +178,7 @@ select:focus {
 	margin-bottom: 20px;
 }
 
-.result-card::before {
+/* .result-card::before {
 	position: absolute;
 	top: 0;
 	bottom: 0;
@@ -187,12 +187,12 @@ select:focus {
 	background: var(--color-accent);
 	content: "";
 	transition: width 160ms ease;
-}
+} */
 
-.item-card-selected::before,
+/* .item-card-selected::before,
 .location-card-selected::before {
 	width: 8px;
-}
+} */
 
 .result-card header {
 	background: var(--color-primary);
@@ -221,6 +221,31 @@ select:focus {
 	color: var(--color-text);
 	overflow-wrap: anywhere;
 }
+
+table {
+	width: 100%;
+	align-items: center; 
+	text-align: center;
+	color: var(--color-text);
+}
+
+th {
+	background-color: var(--color-text);
+	color: var(--color-on-primary);
+	border-radius: var(--radius);
+	width: 50%;
+}
+
+tr:hover td {
+	background-color: var(--color-primary);
+	color: var(--color-on-primary);
+	border-radius: var(--radius);
+}
+ 
+/*tr:nth-child(even) {
+    background-color: var(--color-secondary);
+	color: var(--color-on-primary)
+} */
 
 .location-items {
 	border-top: 1px solid rgba(193, 133, 14, 0.45);
